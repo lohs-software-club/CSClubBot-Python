@@ -1,12 +1,12 @@
 import discord
 import asyncio
-
+import sys
 
 client = discord.Client()
 
 command_sequence = "."
 subscription_role_suffix = "*" #can only be one character/will only check first character
-discord_bot_token = 'NDAzNTYwNjgwODg5OTA5MjQ4.DXToHw.X-OY1mPqGA87B-i5CJWQnbU6gMc'
+discord_bot_token = str(sys.argv[0])
 server_name = "test"
 bot_channel_name = "bot-spam"
 
