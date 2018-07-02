@@ -6,7 +6,8 @@ client = discord.Client()
 
 command_sequence = "."
 subscription_role_suffix = "*" #can only be one character/will only check first character
-discord_bot_token = str(sys.argv[0])
+discord_bot_token = str(sys.argv[1])
+print(discord_bot_token)
 server_name = "LOHS Computer Science Club"
 bot_channel_name = "bot-spam"
 
