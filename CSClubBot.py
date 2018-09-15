@@ -28,7 +28,7 @@ async def on_ready():
     logging.info('Yo!')
     logging.info('His palms are sweaty, knees weak, arms are heavy!')
     logging.info("There's vomit on his sweater already, mom's spaghetti.")
-    logging.info('Bot Ready.', end="\n\n")
+    logging.info('Bot Ready.\n\n')
     logging.info("Name: " + client.user.name)
     logging.info("ID " + client.user.id)
     logging.info('------')
