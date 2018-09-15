@@ -2,6 +2,14 @@ import discord
 import asyncio
 import sys
 
+import logging
+#https://discordpy.readthedocs.io/en/latest/logging.html
+logger = logging.getLogger('discord')
+logger.setLevel(logging.DEBUG)
+handler = logging.FileHandler(filename='discordbot.log', encoding='utf-8', mode='w')
+handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
+logger.addHandler(handler)
+
 client = discord.Client()
 
 command_sequence = "."
