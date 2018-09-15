@@ -4,31 +4,36 @@ import sys
 
 import logging
 #https://discordpy.readthedocs.io/en/latest/logging.html
-logger = logging.getLogger('discord')
-logger.setLevel(logging.DEBUG)
-handler = logging.FileHandler(filename='discordbot.log', encoding='utf-8', mode='w')
-handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
-logger.addHandler(handler)
+
+logging.basicConfig(filename='csclubbot.log', filemode="w", level=logging.DEBUG)  
+# logging.debug('This is a debug message')
+# logging.info('This is an info message')
+# logging.warning('This is a warning message')
+# logging.error('This is an error message')
+# logging.critical('This is a critical error message')
+
+
 
 client = discord.Client()
 
 command_sequence = "."
 subscription_role_suffix = "*" #can only be one character/will only check first character
 discord_bot_token = str(sys.argv[1])
-print(discord_bot_token)
 server_name = "LOHS Computer Science Club"
 bot_channel_name = "bot-spam"
 
 @client.event
 async def on_ready():
     #easter egg credit: https://github.com/nbd9/PastaBot/blob/0caeca8bdab8f9828f348024d4f4908696b166a0/src/main/java/utils/InterfaceListener.java#L15
-    print('Yo!')
-    print('His palms are sweaty, knees weak, arms are heavy!')
-    print("There's vomit on his sweater already, mom's spaghetti.")
-    print('Bot Ready.', end="\n\n")
-    print("Name: " + client.user.name)
-    print("ID " + client.user.id)
-    print('------')
+    logging.info('Yo!')
+    logging.info('His palms are sweaty, knees weak, arms are heavy!')
+    logging.info("There's vomit on his sweater already, mom's spaghetti.")
+    logging.info('Bot Ready.', end="\n\n")
+    logging.info("Name: " + client.user.name)
+    logging.info("ID " + client.user.id)
+    logging.info('------')
+    logging.debug('Bot initialized with token: ' + discord_bot_token)
+
 
 
 
@@ -171,7 +176,7 @@ async def handle_subscription(message, is_subscribing):
 
         # go through remaining roles and tell the user that they dont exist
         for invalidrole in to_act_roles:
-            print(invalidrole)
+            logging.info(invalidrole)
             await client.send_message(message.channel,
                                       "No action was taken for ***{}*** because it doesn't exist.".format(invalidrole))
 
@@ -191,9 +196,9 @@ async def list_users_subbed_roles(message):
         user_roles = await get_processed_role_name_list(message.author.roles)
         is_there_something_to_show = False  # assume nothing to show
 
-        print(user_roles)
-        print(message.author)
-        print(message.author.roles)
+        logging.debug(user_roles)
+        logging.debug(message.author)
+        logging.debug(message.author.roles)
 
         for subrole in sub_roles:
             # author_clean_role_name = cleanup_role_name(userrole.name)
@@ -221,7 +226,7 @@ async def handle_help(message):
 
 async def get_processed_role_name_list(roles):
     role_names = []
-    print(roles)
+    logging.debug(roles)
 
     for role in roles:
         role_names.append(await cleanup_role_name(role.name))
@@ -243,8 +248,8 @@ def run_client(client, *args, **kwargs):
         try:
             loop.run_until_complete(client.start(*args, **kwargs))
         except Exception as e:
-            print("Error", e)  # or use proper logging
-        print("Waiting until restart")
+            logging.error("Error", e)  # or use proper logging
+        logging.info("Waiting until restart")
         time.sleep(600)
 
 run_client(client, discord_bot_token)
