@@ -226,5 +226,18 @@ async def cleanup_role_name(name):
 # discord.on_member_join(member)
 # discord.on_member_remove(member)
 
-client.run(discord_bot_token)
+#client.run(discord_bot_token)
+
+#network blip resilience https://stackoverflow.com/a/49082260
+def run_client(client, *args, **kwargs):
+    loop = asyncio.get_event_loop()
+    while True:
+        try:
+            loop.run_until_complete(client.start(*args, **kwargs))
+        except Exception as e:
+            print("Error", e)  # or use proper logging
+        print("Waiting until restart")
+        time.sleep(600)
+
+run_client(client, discord_bot_token)
 
