@@ -253,6 +253,21 @@ async def send_embed_message(msg_channel, msg_title, message, color=EMBEDCOLOR_D
 async def send_error_message(msg_channel, message):
     await send_embed_message(msg_channel, "Error:", message, EMBEDCOLOR_ERROR)
 
+async def send_list_message(msg_channel, title, response_list, intro_message="", end_message=""):
+    
+    if intro_message != "":
+        bot_response_content = intro_message
+    else:
+        bot_response_content = ""
+
+    for item in response_list:
+        bot_response_content += str(item) + "\n"
+
+    if end_message != "":
+        bot_response_content += "\n\n" + end_message
+
+    await send_embed_message(msg_channel, title, bot_response_content)
+
 async def get_processed_role_name_list(roles):
     role_names = []
     logging.debug(roles)
