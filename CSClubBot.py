@@ -125,8 +125,8 @@ async def test_string_beginnings(string, beginning):
             return True
 
 
-async def get_subscribeable_roles_for_server(server_name):
-    roles = discord.utils.get(client.servers, name=server_name).roles
+async def get_subscribeable_roles_for_server(server):
+    roles = server.roles
     subscription_roles = []
     for role in roles:
         if role.name[-1] == subscription_role_suffix:
@@ -147,7 +147,7 @@ async def handle_subscription(message, is_subscribing):
 
     if await check_for_spam_channel(message):
 
-        sub_roles = await get_subscribeable_roles_for_server(server_name)
+        sub_roles = await get_subscribeable_roles_for_server(message.server)
         to_act_roles = message.content.lower().split()  # get the space separated parameters
         to_act_roles.pop(0)  # remove the first one, which is the command
 
@@ -196,7 +196,7 @@ async def handle_subscription(message, is_subscribing):
 
 async def list_sub_roles(message):
     if await check_for_spam_channel(message):
-        sub_roles = await get_subscribeable_roles_for_server(server_name)
+        sub_roles = await get_subscribeable_roles_for_server(message.server)
         await client.send_message(message.channel, "Here are the roles you may subscribe to:")
 
         for role in sub_roles:
@@ -205,7 +205,7 @@ async def list_sub_roles(message):
 
 async def list_users_subbed_roles(message):
     if await check_for_spam_channel(message):
-        sub_roles = await get_subscribeable_roles_for_server(server_name)
+        sub_roles = await get_subscribeable_roles_for_server(message.server)
         user_roles = await get_processed_role_name_list(message.author.roles)
         is_there_something_to_show = False  # assume nothing to show
 
