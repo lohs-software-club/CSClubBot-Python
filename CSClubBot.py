@@ -212,7 +212,7 @@ async def list_users_subbed_roles(message):
         sub_roles = await get_subscribeable_roles_for_server(message.server)
         user_roles = await get_processed_role_name_list(message.author.roles)
         is_there_something_to_show = False  # assume nothing to show
-        bot_response_content = ""
+        subbed_roles = []
 
         logging.debug(user_roles)
         logging.debug(message.author)
@@ -223,12 +223,13 @@ async def list_users_subbed_roles(message):
             if await cleanup_role_name(subrole.name) in user_roles:
                 if not (is_there_something_to_show):
                     is_there_something_to_show = True
-                bot_response_content += "***{}***\n".format(await cleanup_role_name(subrole.name))
+                subbed_roles.append("***{}***".format(await cleanup_role_name(subrole.name)))
 
         if not(is_there_something_to_show):
-            bot_response_content += "You have not subscribed to anything. ***:frowning:***"
+            await send_embed_message(message.channel, "Your Subscriptions:", "You have not subscribed to anything. ***:frowning:***")
+            return
 
-        await send_embed_message(message.channel, "Your Subscriptions:", bot_response_content)
+        await send_list_message(message.channel, "Your Subscriptions:", subbed_roles)
 
 async def handle_help(message):
     if await check_for_spam_channel(message):
