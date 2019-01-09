@@ -199,10 +199,12 @@ async def handle_subscription(message, is_subscribing):
 async def list_sub_roles(message):
     if await check_for_spam_channel(message):
         sub_roles = await get_subscribeable_roles_for_server(message.server)
-        await client.send_message(message.channel, "Here are the roles you may subscribe to:")
-
+        message_content = ""
+        
         for role in sub_roles:
-            await client.send_message(message.channel, "***{}***".format(role.name[:-1]))
+            message_content += await cleanup_role_name(role.name) + "\n"
+        
+        await send_embed_message(message.channel, "Here are the roles you may subscribe to:", message_content)
 
 
 async def list_users_subbed_roles(message):
