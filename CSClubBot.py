@@ -228,15 +228,17 @@ async def list_users_subbed_roles(message):
 
 async def handle_help(message):
     if await check_for_spam_channel(message):
-        await client.send_message(message.channel, "Here are the commands you can use:")
-        await client.send_message(message.channel, "***.sub***,***.subscribe*** - Subscribe to a role")
-        await client.send_message(message.channel, "***.unsub***,***.unsubscribe*** - Unsubscribe from a role")
-        await client.send_message(message.channel, "***.sub***,***.subscribe*** - Subscribe to a role")
-        await client.send_message(message.channel, "***.list*** - List the subscription roles that are available")
-        await client.send_message(message.channel, "***.check*** - Check what roles you are subscribed to")
-        await client.send_message(message.channel, "***.help*** - Display this list")
-    else:
-        await client.send_message(message.channel, "Please use the bot-spam channel to talk to me")
+        help_msg = '''
+        Here are the commands you can use:
+        ***.sub***,***.subscribe*** - Subscribe to a role
+        ***.unsub***,***.unsubscribe*** - Unsubscribe from a role
+        ***.list*** - List the subscription roles that are available
+        ***.check*** - Check what roles you are subscribed to
+        ***.help*** - Display this list
+        '''
+        await send_embed_message(message.channel, "Help", help_msg)
+    # else:
+    #     await client.send_message(message.channel, "Please use the bot-spam channel to talk to me")
 
 
 async def send_embed_message(msg_channel, msg_title, message, color=EMBEDCOLOR_DEFAULT):
