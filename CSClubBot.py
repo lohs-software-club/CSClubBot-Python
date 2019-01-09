@@ -250,6 +250,9 @@ async def send_embed_message(msg_channel, msg_title, message, color=EMBEDCOLOR_D
     # em.set_author(name='Someone', icon_url=client.user.default_avatar_url)
     await client.send_message(msg_channel, embed=em)
 
+async def send_error_message(msg_channel, message):
+    await send_embed_message(msg_channel, "Error:", message, EMBEDCOLOR_ERROR)
+
 async def get_processed_role_name_list(roles):
     role_names = []
     logging.debug(roles)
