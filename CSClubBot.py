@@ -237,8 +237,8 @@ async def handle_help(message):
         await client.send_message(message.channel, "Please use the bot-spam channel to talk to me")
 
 
-async def send_embed_message(msg_channel, msg_title, message):
-    em = discord.Embed(title=msg_title, description=message, colour=0xDEADBF)
+async def send_embed_message(msg_channel, msg_title, message, color=0x00006F):
+    em = discord.Embed(title=msg_title, description=message, colour=color)
     # em.set_author(name='Someone', icon_url=client.user.default_avatar_url)
     await client.send_message(msg_channel, embed=em)
 
