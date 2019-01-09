@@ -13,6 +13,8 @@ logging.basicConfig(filename="csclubbot.log", filemode="w", level=logging.DEBUG)
 # logging.error('This is an error message')
 # logging.critical('This is a critical error message')
 
+EMBEDCOLOR_ERROR = 0xFF0000
+EMBEDCOLOR_DEFAULT = 0x00006F
 
 
 client = discord.Client()
@@ -237,7 +239,7 @@ async def handle_help(message):
         await client.send_message(message.channel, "Please use the bot-spam channel to talk to me")
 
 
-async def send_embed_message(msg_channel, msg_title, message, color=0x00006F):
+async def send_embed_message(msg_channel, msg_title, message, color=EMBEDCOLOR_DEFAULT):
     em = discord.Embed(title=msg_title, description=message, colour=color)
     # em.set_author(name='Someone', icon_url=client.user.default_avatar_url)
     await client.send_message(msg_channel, embed=em)
