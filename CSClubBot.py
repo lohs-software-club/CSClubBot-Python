@@ -62,42 +62,42 @@ async def on_message(message):
         await client.send_message(message.channel, str(message.channel.is_private))
 
     elif await test_for_command(message.content, "subscribe"):
-        logging.debug("subscribe command recieved")
+        logging.info("subscribe command recieved")
 
         await handle_subscription(message, True)
 
     elif await test_for_command(message.content, "sub"):
-        logging.debug("sub command recieved")
+        logging.info("sub command recieved")
 
         await handle_subscription(message, True)
 
     elif await test_for_command(message.content, "unsubscribe"):
-        logging.debug("unsubscribe command recieved")
+        logging.info("unsubscribe command recieved")
 
         await handle_subscription(message, False)
 
     elif await test_for_command(message.content, "unsub"):
-        logging.debug("unsub command recieved")
+        logging.info("unsub command recieved")
 
         await handle_subscription(message, False)
 
     elif await test_for_command(message.content, "list"):
-        logging.debug("list command recieved")
+        logging.info("list command recieved")
         
         await list_sub_roles(message)
 
     elif await test_for_command(message.content, "check"):
-        logging.debug("check command recieved")
+        logging.info("check command recieved")
 
         await list_users_subbed_roles(message)
 
     elif await test_for_command(message.content, "help"):
-        logging.debug("help command recieved")
+        logging.info("help command recieved")
 
         await handle_help(message)
 
     elif await test_for_command_sequence(message.content):
-        logging.debug("invalid command recieved")
+        logging.info("invalid command recieved")
 
         await handle_help(message)
 
