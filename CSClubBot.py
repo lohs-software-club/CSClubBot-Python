@@ -372,7 +372,7 @@ async def get_processed_role_name_list(roles):
     return role_names
 
 async def cleanup_role_name(name):
-    return name[:-len(subscription_role_suffix)].lower()
+    return name[:-len(subscription_role_suffix)]#.lower()
 
 # discord.on_member_join(member)
 # discord.on_member_remove(member)
