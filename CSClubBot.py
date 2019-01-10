@@ -243,6 +243,35 @@ async def handle_subscription(message, is_subscribing):
                                       "No action was taken for ***{}*** because it doesn't exist.".format(invalidrole))
 
 
+
+async def show_subscription_info(message):
+    if await check_for_spam_channel(message):
+        sub_roles = await get_subscribeable_roles_for_server(message.server)
+
+        response_content = ""
+        index = 0
+
+        for role in sub_roles:
+            if role in message.author.roles:
+                response_content += "{}. ***{}***".format(index, await cleanup_role_name(role.name))
+            else:
+                response_content += "{}. {}".format(index, await cleanup_role_name(role.name))
+
+            response_content += "\n"
+            index += 1
+
+        response_content += "\n\n You are already subscribed to roles listed in ***bold***"
+        response_content += "\n To change a subscription, please use ***.toggle*** followed by"
+
+
+        await send_embed_message(message.channel,
+                "Subscription Status for {}".format(message.author.display_name),
+                response_content)
+
+
+
+
+
 async def list_sub_roles(message):
     if await check_for_spam_channel(message):
         sub_roles = await get_subscribeable_roles_for_server(message.server)
