@@ -68,31 +68,6 @@ async def on_message(message):
             logging.info("Invalid Command Entered")
 
 
-"""
-This method takes the input from discord and a string representing the command being tested for
-and checks if it begins with the commandCharacter plus the requested command
-"""
-async def test_for_command(input, string_to_test):
-    return await test_string_beginnings(input, command_sequence + string_to_test)
-
-async def test_for_command_sequence(input):
-    return await test_string_beginnings(input, command_sequence)
-
-"""
-this function tests the first characters of an input string for the beginning string.
-Returns true if the entire beginning string was found in the unput string, false otherwise
-"""
-async def test_string_beginnings(string, beginning):
-    for index in range(0, len(string)):
-        # if there is no match at any point, return false
-        if string[index] != beginning[index]:
-            return False
-
-        # if there is a match and the next index is not in the command sequence, return true
-        elif string[index] == beginning[index] and index + 1 >= len(beginning):
-            return True
-
-
 async def get_subscribeable_roles_for_server(server):
     roles = server.roles
     subscription_roles = []
@@ -103,15 +78,6 @@ async def get_subscribeable_roles_for_server(server):
             subscription_roles.append(role)
 
     return subscription_roles
-
-async def get_subscribeable_role_names_for_server(server):
-    roles = get_subscribeable_roles_for_server(server)
-    subscription_role_names = []
-    for role in roles:
-        subscription_role_names.append(role.name.lower())
-
-    return subscription_role_names
-
 
 async def check_for_spam_channel(message):
     if message.channel == discord.utils.get(client.get_all_channels(), name=bot_channel_name):
@@ -159,57 +125,6 @@ def represents_int(s):
     except ValueError:
         return False
 
-async def handle_subscription(message, is_subscribing):
-
-    if await check_for_spam_channel(message):
-
-        sub_roles = await get_subscribeable_roles_for_server(message.server)
-        to_act_roles = message.content.lower().split()  # get the space separated parameters
-        to_act_roles.pop(0)  # remove the first one, which is the command
-
-        # print("TSR: " + str(to_act_roles))
-
-        # remove authors existing roles from subscription list
-        for userrole in message.author.roles:
-
-            # remove the role suffix if it is a subscription role and lowercase it
-            author_clean_role_name = cleanup_role_name(userrole.name)
-
-            # If a role in the user's list of roles matches one of those that was requested for action send a message
-            # and remove it.
-            if author_clean_role_name in to_act_roles:
-                if is_subscribing:
-                    await client.send_message(message.channel,
-                                              "You are already subscribed to ***{}***.".format(author_clean_role_name))
-                    to_act_roles.remove(author_clean_role_name)
-            # othewise, if the role is at least in the list of subscription roles
-            elif author_clean_role_name in sub_roles:
-                if not(is_subscribing):
-                    await client.send_message(message.channel,
-                                              "You are not currently subscribed to ***{}***.".format(author_clean_role_name))
-
-        # go through each subscribe-able role and check if the user wants to act on it, if so, act and remove it.
-        for subrole in sub_roles:
-
-            if subrole.name[:-len(subscription_role_suffix)].lower() in to_act_roles:
-                if is_subscribing:
-                    await client.add_roles(message.author, subrole)
-                    await client.send_message(message.channel,
-                                              "Successfully subscribed to ***{}***.".format(subrole.name))
-                else:
-                    await client.remove_roles(message.author, subrole)
-                    await client.send_message(message.channel,
-                                              "Successfully unsubscribed from ***{}***.".format(subrole.name))
-
-                to_act_roles.remove(cleanup_role_name(subrole.name))
-
-        # go through remaining roles and tell the user that they dont exist
-        for invalidrole in to_act_roles:
-            logging.info(invalidrole)
-            await client.send_message(message.channel,
-                                      "No action was taken for ***{}*** because it doesn't exist.".format(invalidrole))
-
-
 
 async def show_subscription_info(message):
     if await check_for_spam_channel(message):
@@ -236,44 +151,6 @@ async def show_subscription_info(message):
                 response_content)
 
 
-
-
-
-async def list_sub_roles(message):
-    if await check_for_spam_channel(message):
-        sub_roles = await get_subscribeable_roles_for_server(message.server)
-        message_content = ""
-        
-        for role in sub_roles:
-            message_content += await cleanup_role_name(role.name) + "\n"
-        
-        await send_embed_message(message.channel, "Here are the roles you may subscribe to:", message_content)
-
-
-async def list_users_subbed_roles(message):
-    if await check_for_spam_channel(message):
-        sub_roles = await get_subscribeable_roles_for_server(message.server)
-        user_roles = await get_processed_role_name_list(message.author.roles)
-        is_there_something_to_show = False  # assume nothing to show
-        subbed_roles = []
-
-        logging.debug(user_roles)
-        logging.debug(message.author)
-        logging.debug(message.author.roles)
-
-        for subrole in sub_roles:
-            # author_clean_role_name = cleanup_role_name(userrole.name)
-            if await cleanup_role_name(subrole.name) in user_roles:
-                if not (is_there_something_to_show):
-                    is_there_something_to_show = True
-                subbed_roles.append("***{}***".format(await cleanup_role_name(subrole.name)))
-
-        if not(is_there_something_to_show):
-            await send_embed_message(message.channel, "Your Subscriptions:", "You have not subscribed to anything. ***:frowning:***")
-            return
-
-        await send_list_message(message.channel, "Your Subscriptions:", subbed_roles)
-
 async def handle_help(message):
     if await check_for_spam_channel(message):
         help_msg = '''
@@ -297,46 +174,6 @@ async def send_error_message(msg_channel, message):
 
 async def send_success_message(msg_channel, message):
     await send_embed_message(msg_channel, "Success!", message, EMBEDCOLOR_SUCCESS)
-
-async def send_list_message(msg_channel, title, response_list, intro_message="", end_message=""):
-    
-    if intro_message != "":
-        bot_response_content = intro_message
-    else:
-        bot_response_content = ""
-
-    for item in response_list:
-        bot_response_content += str(item) + "\n"
-
-    if end_message != "":
-        bot_response_content += "\n\n" + end_message
-
-    await send_embed_message(msg_channel, title, bot_response_content)
-
-
-async def make_string_list(item_list, intro_message="", end_message=""):
-    
-    if intro_message != "":
-        str_list = intro_message
-    else:
-        str_list = ""
-
-    for item in response_list:
-        str_list += str(item) + "\n"
-
-    if end_message != "":
-        str_list += "\n\n" + end_message
-
-    return str_list
-
-async def get_processed_role_name_list(roles):
-    role_names = []
-    logging.debug(roles)
-
-    for role in roles:
-        role_names.append(await cleanup_role_name(role.name))
-
-    return role_names
 
 async def cleanup_role_name(name):
     return name[:-len(subscription_role_suffix)]#.lower()
