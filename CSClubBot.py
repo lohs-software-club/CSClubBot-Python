@@ -311,11 +311,9 @@ async def handle_help(message):
     if await check_for_spam_channel(message):
         help_msg = '''
         Here are the commands you can use:
-        ***.sub***,***.subscribe*** - Subscribe to a role
-        ***.unsub***,***.unsubscribe*** - Unsubscribe from a role
-        ***.list*** - List the subscription roles that are available
-        ***.check*** - Check what roles you are subscribed to
-        ***.help*** - Display this list
+        ***.manage***, ***.list*** - Show a summary of your subscription options 
+        ***.toggle [subscription number]*** - Toggle your subscription status on or off for subscription number given
+        ***.help*** - Display this help menu
         '''
         await send_embed_message(message.channel, "Help", help_msg)
     # else:
