@@ -46,61 +46,26 @@ async def on_ready():
 @client.event
 async def on_message(message):
 
-    if await test_for_command(message.content, "test"):
-        counter = 0
-        tmp = await client.send_message(message.channel, 'Calculating messages...')
-        async for log in client.logs_from(message.channel, limit=100):
-            if log.author == message.author:
-                counter += 1
+   if message.content.startswith(command_sequence):
+        command = message.content.split(' ', 1 )[0]
+        logging.debug("Command {} recieved".format(command))
+        if command == command_sequence + "manage":
 
-        await client.edit_message(tmp, 'You have {} messages.'.format(counter))
+            await show_subscription_info(message)
 
-    elif await test_for_command(message.content, "sleep"):
-        await asyncio.sleep(5)
-        await client.send_message(message.channel, 'Done sleeping')
+        elif command == command_sequence + "list":
 
-    elif await test_for_command(message.content, "ispm"):
-        await client.send_message(message.channel, str(message.channel.is_private))
+            await show_subscription_info(message)
 
-    elif await test_for_command(message.content, "subscribe"):
-        logging.info("subscribe command recieved")
+        elif command == command_sequence + "toggle":
 
-        await handle_subscription(message, True)
-
-    elif await test_for_command(message.content, "sub"):
-        logging.info("sub command recieved")
-
-        await handle_subscription(message, True)
-
-    elif await test_for_command(message.content, "unsubscribe"):
-        logging.info("unsubscribe command recieved")
-
-        await handle_subscription(message, False)
-
-    elif await test_for_command(message.content, "unsub"):
-        logging.info("unsub command recieved")
-
-        await handle_subscription(message, False)
-
-    elif await test_for_command(message.content, "list"):
-        logging.info("list command recieved")
+            await toggle_subscription(message)
         
-        await list_sub_roles(message)
+        elif command == command_sequence + "help":
 
-    elif await test_for_command(message.content, "check"):
-        logging.info("check command recieved")
-
-        await list_users_subbed_roles(message)
-
-    elif await test_for_command(message.content, "help"):
-        logging.info("help command recieved")
-
-        await handle_help(message)
-
-    elif await test_for_command_sequence(message.content):
-        logging.info("invalid command recieved")
-
-        await handle_help(message)
+            await handle_help(message)
+        else: 
+            logging.info("Invalid Command Entered")
 
 
 """
