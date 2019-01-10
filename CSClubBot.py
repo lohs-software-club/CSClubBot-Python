@@ -138,7 +138,13 @@ async def get_subscribeable_roles_for_server(server):
 
     return subscription_roles
 
+async def get_subscribeable_role_names_for_server(server):
+    roles = get_subscribeable_roles_for_server(server)
+    subscription_role_names = []
+    for role in roles:
+        subscription_role_names.append(role.name.lower())
 
+    return subscription_role_names
 async def check_for_spam_channel(message):
     if message.channel == discord.utils.get(client.get_all_channels(), name=bot_channel_name):
         return True
