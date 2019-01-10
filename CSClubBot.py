@@ -152,6 +152,46 @@ async def check_for_spam_channel(message):
     else:
         return False
 
+
+async def toggle_subscription(message):
+    if await check_for_spam_channel(message):
+        sub_roles = await get_subscribeable_roles_for_server(message.server)
+        message_as_list = message.content.split(' ')
+
+        if len(message_as_list) > 2:
+            await send_error_message(message.channel, "You cannot toggle more than one subscription at once")
+            return
+        
+        if not represents_int(message_as_list[1]):
+            await send_error_message(message.channel, "Only integer subscription ID's are allowed.\nYou can find the ID by using ***.list*** or ***.manage***")
+            return
+
+        selected_role_index = int(message_as_list[1])
+        selected_role = sub_roles[selected_role_index]
+
+        try:
+                
+            if selected_role in message.author.roles:
+                #message author is already subscribed to role
+                await client.remove_roles(message.author, selected_role)
+                await send_success_message(message.channel, "You are now unsubscribed from **{}**".format(selected_role.name))
+
+            else:
+                await client.add_roles(message.author, selected_role)
+                await send_success_message(message.channel, "You are now subscribed to **{}**".format(selected_role.name))
+        except discord.errors.Forbidden:
+            await send_error_message(message.channel, "Whoops. I cannot update your roles. Please make sure that I have the correct permissions and have a rank that is higher than the users you need me to serve.")
+
+
+
+#https://stackoverflow.com/a/1267145
+def represents_int(s):
+    try: 
+        int(s)
+        return True
+    except ValueError:
+        return False
+
 async def handle_subscription(message, is_subscribing):
 
     if await check_for_spam_channel(message):
