@@ -14,6 +14,7 @@ logging.basicConfig(filename="csclubbot.log", filemode="w", level=logging.DEBUG)
 # logging.critical('This is a critical error message')
 
 EMBEDCOLOR_ERROR = 0xFF0000
+EMBEDCOLOR_SUCCESS = 0x00FF00
 EMBEDCOLOR_DEFAULT = 0x00006F
 
 
@@ -259,6 +260,9 @@ async def send_embed_message(msg_channel, msg_title, message, color=EMBEDCOLOR_D
 
 async def send_error_message(msg_channel, message):
     await send_embed_message(msg_channel, "Error:", message, EMBEDCOLOR_ERROR)
+
+async def send_success_message(msg_channel, message):
+    await send_embed_message(msg_channel, "Success!", message, EMBEDCOLOR_SUCCESS)
 
 async def send_list_message(msg_channel, title, response_list, intro_message="", end_message=""):
     
