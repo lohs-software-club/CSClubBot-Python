@@ -96,7 +96,7 @@ async def toggle_subscription(message):
             return
         
         if not represents_int(message_as_list[1]):
-            await send_error_message(message.channel, "Only integer subscription ID's are allowed.\nYou can find the ID by using ***.list*** or ***.manage***")
+            await send_error_message(message.channel, "Only integer subscription ID's are allowed.\nYou can find the ID by using **.list** or **.manage**")
             return
 
         selected_role_index = int(message_as_list[1])
@@ -135,15 +135,15 @@ async def show_subscription_info(message):
 
         for role in sub_roles:
             if role in message.author.roles:
-                response_content += "{}. ***{}***".format(index, await cleanup_role_name(role.name))
+                response_content += "{}. **{}**".format(index, await cleanup_role_name(role.name))
             else:
                 response_content += "{}. {}".format(index, await cleanup_role_name(role.name))
 
             response_content += "\n"
             index += 1
 
-        response_content += "\n\n You are already subscribed to roles listed in ***bold***"
-        response_content += "\n To change a subscription, please use ***.toggle*** followed by"
+        response_content += "\n\n You are already subscribed to roles listed in **bold**"
+        response_content += "\n To change a subscription, please use **.toggle** followed by"
 
 
         await send_embed_message(message.channel,
@@ -155,9 +155,9 @@ async def handle_help(message):
     if await check_for_spam_channel(message):
         help_msg = '''
         Here are the commands you can use:
-        ***.manage***, ***.list*** - Show a summary of your subscription options 
-        ***.toggle [subscription number]*** - Toggle your subscription status on or off for subscription number given
-        ***.help*** - Display this help menu
+        **.manage**, **.list** - Show a summary of your subscription options 
+        **.toggle [subscription number]** - Toggle your subscription status on or off for subscription number given
+        **.help** - Display this help menu
         '''
         await send_embed_message(message.channel, "Help", help_msg)
     # else:
