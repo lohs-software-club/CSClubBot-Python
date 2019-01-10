@@ -275,6 +275,22 @@ async def send_list_message(msg_channel, title, response_list, intro_message="",
 
     await send_embed_message(msg_channel, title, bot_response_content)
 
+
+async def make_string_list(item_list, intro_message="", end_message=""):
+    
+    if intro_message != "":
+        str_list = intro_message
+    else:
+        str_list = ""
+
+    for item in response_list:
+        str_list += str(item) + "\n"
+
+    if end_message != "":
+        str_list += "\n\n" + end_message
+
+    return str_list
+
 async def get_processed_role_name_list(roles):
     role_names = []
     logging.debug(roles)
