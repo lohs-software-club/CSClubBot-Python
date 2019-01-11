@@ -94,6 +94,10 @@ async def toggle_subscription(message):
             await send_error_message(message.channel, "You cannot toggle more than one subscription at once")
             return
         
+        if len(message_as_list) == 1:
+            await send_error_message(message.channel, "Please specify a subscription number\n i.e. **.toggle 5** to toggle subscription #5\n\nPlease tefer to the **.list** or **.manage** commands for a list of subscription numbers.")
+            return
+        
         if not represents_int(message_as_list[1]):
             await send_error_message(message.channel, "Only integer subscription ID's are allowed.\nYou can find the ID by using **.list** or **.manage**")
             return
