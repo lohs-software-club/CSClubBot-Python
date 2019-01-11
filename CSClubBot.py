@@ -99,11 +99,16 @@ async def toggle_subscription(message):
             await send_error_message(message.channel, "Please specify a subscription number\n i.e. **.toggle 5** to toggle subscription #5\n\nPlease tefer to the **.list** or **.manage** commands for a list of subscription numbers.")
             return
         
-        if not represents_int(message_as_list[1]):
-            await send_error_message(message.channel, "Only integer subscription ID's are allowed.\nYou can find the ID by using **.list** or **.manage**")
+        selected_role_index = int(message_as_list[1])
+
+        if not represents_int(message_as_list[1]) or not (selected_role_index >= 0):
+            await send_error_message(message.channel, "Only positive integer subscription ID's are allowed.\nYou can find the ID by using **.list** or **.manage**")
             return
 
-        selected_role_index = int(message_as_list[1])
+        if selected_role_index > len(sub_roles)-1:
+            await send_error_message(message.channel, "The maximum possible role number for this server is " + len(sub_roles)-1 )
+            return
+
         selected_role = sub_roles[selected_role_index]
 
         try:
