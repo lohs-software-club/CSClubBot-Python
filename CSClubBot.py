@@ -7,7 +7,7 @@ import time
 import logging
 #https://discordpy.readthedocs.io/en/latest/logging.html
 
-logging.basicConfig(filename="csclubbot.log", filemode="w", level=logging.DEBUG)
+logging.basicConfig(filename="csclubbot.log", filemode="w", level=logging.INFO)
 # logging.debug('This is a debug message')
 # logging.info('This is an info message')
 # logging.warning('This is a warning message')
