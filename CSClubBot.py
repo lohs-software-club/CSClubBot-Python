@@ -2,10 +2,10 @@
 import discord
 import asyncio
 import sys
+import os
 import time
 
 import logging
-#https://discordpy.readthedocs.io/en/latest/logging.html
 
 logging.basicConfig(filename="csclubbot.log", filemode="w", level=logging.INFO)
 # logging.debug('This is a debug message')
@@ -23,7 +23,9 @@ client = discord.Client()
 
 command_sequence = "."
 subscription_role_suffix = "*" #can only be one character/will only check first character
-discord_bot_token = str(sys.argv[1])
+discord_bot_token = str(
+    sys.argv[1] if sys.argv[1] != None else os.environ['BOT_TOKEN'])
+server_name = "LOHS Computer Science Club"
 bot_channel_name = "bot-spam"
 
 @client.event
