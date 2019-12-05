@@ -1,7 +1,13 @@
 FROM python:latest
 
-#WORKDIR /usr/local/bin
+# Install pipenv
+RUN pip install -U pipenv
 
-COPY CSClubBot.py .
+WORKDIR /bot
 
+COPY . .
+
+RUN pipenv install --system --deploy
+
+ENTRYPOINT ["python3"]
 CMD ["CSClubBot.py"]
